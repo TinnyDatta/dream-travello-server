@@ -9,8 +9,6 @@ const port = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
-// travelMaster
-// GPFRaQvztuo9MqEa
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.wlyr1jn.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
 console.log(uri);
@@ -28,9 +26,20 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
-    await client.connect();
+    // await client.connect();
+
+
+    const touristsSpotsCollection = client.db('touristsSpotsDB').collection('touristsSpot');
+
+    app.post('/addTouristsSpots', async(req, res) => {
+      const addedSpot = req.body;
+      console.log(addedSpot);
+      const result = await touristsSpotsCollection.insertOne(addedSpot);
+      res.send(result);
+    })
+
     // Send a ping to confirm a successful connection
-    await client.db("admin").command({ ping: 1 });
+    // await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
   } finally {
     // Ensures that the client will close when you finish/error
