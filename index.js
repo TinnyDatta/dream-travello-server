@@ -84,6 +84,13 @@ async function run() {
       const result = await touristsSpotsCollection.updateOne(filter, spot, options)
       res.send(result);
     })
+
+    app.delete('/addTouristsSpots/:id', async(req, res) => {
+      const id = req.params.id;
+      const query = {_id: new ObjectId(id)}
+      const result = await touristsSpotsCollection.deleteOne(query);
+      res.send(result);
+    })
      
     
     // Send a ping to confirm a successful connection
